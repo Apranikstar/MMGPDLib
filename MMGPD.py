@@ -6,8 +6,9 @@ from scipy.integrate import quad
 import src.GPD.computeGPD as computeGPD
 import src.GPD.computePDF as computePDF
 import src.GPD.computeProfileFunction as computeProfileFunction
-
-def xGPD(analysisType, analysisSet, analysisGPD, analysisFlavour, x , Q2, t):
+import src.GPD.analysisHandler as analysisHandler
+def xGPD(analysisType, analysisSet, analysisGPD, analysisFlavour, x, t):
+    Q2 = analysisHandler.getQ2(analysisType)
     if analysisGPD == "H":
         analysisUPDF = computePDF.GetAnalysisUPDF(analysisType)
         profileFunction = computeProfileFunction._profileFuncH(analysisType,analysisSet,analysisFlavour, x)
