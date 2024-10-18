@@ -1,5 +1,5 @@
 import lhapdf
-import csv
+import csv 
 import numpy as np
 import src.GPD.csvdataparser as csvdataparser
 from scipy.integrate import quad
@@ -7,6 +7,7 @@ import src.GPD.computeGPD as computeGPD
 import src.GPD.computePDF as computePDF
 import src.GPD.computeProfileFunction as computeProfileFunction
 import src.GPD.analysisHandler as analysisHandler
+import src.GPD.computeGA as computeGA
 def xGPD(analysisType, analysisSet, analysisGPD, analysisFlavour, x, t):
     Q2 = analysisHandler.getQ2(analysisType)
     if analysisGPD == "H":
@@ -27,7 +28,8 @@ def xGPD(analysisType, analysisSet, analysisGPD, analysisFlavour, x, t):
         results = computeGPD.computeE(analysisPDF, profileFunction, t, analysisFlavour)
         return results
         
-
+def G_A(t,percision):
+    return computeGA.calcGA(t, percision)
 
 
         
