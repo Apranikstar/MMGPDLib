@@ -3,20 +3,6 @@ import numpy as np
 import src.GPD.csvdataparser as csvdataparser
 from scipy.integrate import quad
 
-# First we calculate PDF from LHAPDF and then we calculate PDF from our parameterization 
-#############  Subroutines  #############
-def GetAnalysisUPDF(AnalysisType):
-    if AnalysisType == "HGAG23":
-        return lhapdf.mkPDF("NNPDF40_nlo_as_01180",0)
-    if AnalysisType == "Analysis2":
-        return lhapdf.mkPDF("CT10nlo",0)
-
-def GetAnalysisPPDF(AnalysisType):
-    if AnalysisType == "HGAG23":
-        return lhapdf.mkPDF("NNPDFpol11_100",0)
-    if AnalysisType == "Analysis2":
-        return lhapdf.mkPDF("CT10nlo",0)
-
 
 def _uv(x,analysisPDFSET,Q2):
     results = []
@@ -48,6 +34,12 @@ def _sbar(x,analysisPDFSET,Q2):
     for items in x:
         results.append(analysisPDFSET.xfxQ(-3,items,np.sqrt(Q2)) )
     return results
+def _g(x,analysisPDFSET,Q2):
+    results = []
+    for items in x:
+        results.append(analysisPDFSET.xfxQ(0,items,np.sqrt(Q2)) )
+    return results
+
  
 
 def _PDF(x,Q2, flavourList, analysisPDFSET):
@@ -77,6 +69,8 @@ def _PDF(x,Q2, flavourList, analysisPDFSET):
             results["dbar"]= _dbar(x,analysisPDFSET,Q2)
         elif flavour =="sbar":
             results["sbar"]=  _sbar(x,analysisPDFSET,Q2)
+        elif flavour =="g":
+            results["g"]=  _g(x,analysisPDFSET,Q2)
 
     return results
         

@@ -8,28 +8,42 @@ import src.GPD.computePDF as computePDF
 import src.GPD.computeProfileFunction as computeProfileFunction
 import src.GPD.analysisHandler as analysisHandler
 import src.GPD.computeGA as computeGA
-def xGPD(analysisType, analysisSet, analysisGPD, analysisFlavour, x, t):
-    Q2 = analysisHandler.getQ2(analysisType)
+import src.GPD.initializeAnalysis as initializeAnalysis
+
+def listAnalysis():
+    analysisHandler.List()
+
+def xGPD(InitlizerArgs, analysisSet, analysisGPD, analysisFlavour, x, t):
+    Q2 = analysisHandler.getQ2(InitlizerArgs[0])
     if analysisGPD == "H":
-        analysisUPDF = computePDF.GetAnalysisUPDF(analysisType)
-        profileFunction = computeProfileFunction._profileFuncH(analysisType,analysisSet,analysisFlavour, x)
-        pdfFunction = computePDF._PDF(x,Q2, analysisFlavour, analysisUPDF)
+        profileFunction = computeProfileFunction._profileFuncH(InitlizerArgs[0],analysisSet,analysisFlavour, x)
+        pdfFunction = computePDF._PDF(x,Q2, analysisFlavour, InitlizerArgs[1])
         results = computeGPD.computeH(pdfFunction, profileFunction, t, analysisFlavour)
         return results
     if analysisGPD == "Ht":
-        analysisPPDF = computePDF.GetAnalysisPPDF(analysisType)
-        profileFunction = computeProfileFunction._profileFuncHt(analysisType,analysisSet,analysisFlavour, x)
-        pdfFunction = computePDF._PDF(x,Q2, analysisFlavour, analysisPPDF)
+        profileFunction = computeProfileFunction._profileFuncHt(InitlizerArgs[0],analysisSet,analysisFlavour, x)
+        pdfFunction = computePDF._PDF(x,Q2, analysisFlavour, InitlizerArgs[2])
         results = computeGPD.computeHt(pdfFunction, profileFunction, t, analysisFlavour)
         return results
     if analysisGPD == "E":
-        profileFunction = computeProfileFunction._profileFuncE(analysisType,analysisSet, analysisFlavour, x)
-        analysisPDF = computePDF.ComputePDFEFunction(analysisType,analysisSet, analysisFlavour, x)
+        profileFunction = computeProfileFunction._profileFuncE(InitlizerArgs[0],analysisSet, analysisFlavour, x)
+        analysisPDF = computePDF.ComputePDFEFunction(InitlizerArgs[0],analysisSet, analysisFlavour, x)
         results = computeGPD.computeE(analysisPDF, profileFunction, t, analysisFlavour)
         return results
         
-def G_A(t,percision):
-    return computeGA.calcGA(t, percision)
+def G_A(InitlizerArgs, analysisSet,t,percision ):
+    def GAintegrand(x,t,InitlizerArgs, analysisSet):
+        HtUV = computeGA.Ht_uv(x,t,InitlizerArgs, analysisSet)
+        HtDV = computeGA.Ht_dv(x,t,InitlizerArgs, analysisSet)
+        HtUBAR = computeGA.Ht_ubar(x,t,InitlizerArgs, analysisSet)
+        HtDBAR = computeGA.Ht_dbar(x,t,InitlizerArgs, analysisSet)
+        return HtUV - HtDV + 2*HtUBAR - 2*HtDBAR
+    
+    return quad(GAintegrand, 1e-15, 1, args=(t, InitlizerArgs, analysisSet,),  epsabs=percision, epsrel=percision) [0]
+    
 
 
+
+
+    
         
