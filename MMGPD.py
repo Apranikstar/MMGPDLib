@@ -9,7 +9,7 @@ import src.GPD.computeProfileFunction as computeProfileFunction
 import src.GPD.analysisHandler as analysisHandler
 import src.GPD.computeGA as computeGA
 import src.GPD.initializeAnalysis as initializeAnalysis
-
+import src.GPD.computeF1F2 as computeF1F2
 def listAnalysis():
     analysisHandler.List()
 
@@ -41,6 +41,44 @@ def G_A(InitlizerArgs, analysisSet,t,percision ):
     
     return quad(GAintegrand, 1e-15, 1, args=(t, InitlizerArgs, analysisSet,),  epsabs=percision, epsrel=percision) [0]
     
+
+def G_D(t):
+    Lambda2 = 0.71
+    return (  1 - t / Lambda2 )**(-2) 
+
+def G_ME_P(InitlizerArgs,analysisSet, t):
+    flavourChargeDict = {
+    "uv" : np.divide(2,3),
+    "dv" : np.divide(-1,3),
+    "sv" : np.divide(-1,3)}
+ 
+    m_p = 0.93827 #GeV Proton Mass
+    F1 = computeF1F2.F1(InitlizerArgs,analysisSet, t)
+    F2 = computeF1F2.F2(InitlizerArgs,analysisSet, t)
+    F1P = flavourChargeDict["uv"] * F1["uv"]  + flavourChargeDict["dv"] * F1["dv"] + flavourChargeDict["sv"] * F1["sv"]
+    F2P = flavourChargeDict["uv"] * F2["uv"]  + flavourChargeDict["dv"] * F2["dv"] + flavourChargeDict["sv"] * F2["sv"]
+    G_M_P = F1P + F2P
+    G_E_P = F1P + np.divide(t,4 * np.power(m_p,2)) * F2P
+    #print("Results are : [G_M_Proton , G_E_Proton]")
+    return G_M_P, G_E_P
+
+def G_ME_N(InitlizerArgs,analysisSet, t):
+    flavourChargeDict = {
+    "uv" : np.divide(2,3),
+    "dv" : np.divide(-1,3),
+    "sv" : np.divide(-1,3)}
+
+    m_n = 0.93956
+    F1 = computeF1F2.F1(InitlizerArgs,analysisSet, t)
+    F2 = computeF1F2.F2(InitlizerArgs,analysisSet, t)
+    F1N = flavourChargeDict["dv"] * F1["uv"]  + flavourChargeDict["uv"] * F1["dv"] + flavourChargeDict["sv"] * F1["sv"]
+    F2N = flavourChargeDict["dv"] * F2["uv"]  + flavourChargeDict["uv"] * F2["dv"] + flavourChargeDict["sv"] * F2["sv"]
+    G_M_N = F1N + F2N
+    G_E_N = F1N + np.divide(t,4 * np.power(m_n,2)) * F2N
+    #print("Results are : [G_M_Neutron , G_E_Neutron]")
+    return G_M_N, G_E_N
+
+
 
 
 

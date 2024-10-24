@@ -12,3 +12,9 @@ def get_flavour_values(dataFilename, flavourKeyList):
     return result
 
 
+def getFlavourListFromCSV(AnalysisType,GPDType, AnalysisSet):
+    # Open and read the CSV file
+    with open("src/GPD/data/"+AnalysisType +"/"+ GPDType +"/"+ AnalysisSet+".csv", 'r') as file:
+        reader = csv.reader(file)
+        return [row[0] for row in reader]
+
