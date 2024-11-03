@@ -8,39 +8,119 @@ def _uv(x,analysisPDFSET,Q2):
     results = []
     for items in x:
         results.append(analysisPDFSET.xfxQ(2,items,np.sqrt(Q2)) - analysisPDFSET.xfxQ(-2,items,np.sqrt(Q2)))
-    return results
-def _dv(x,analysisPDFSET,Q2):
+        return results
+
+def _u(x,analysisPDFSET,Q2):
     results = []
     for items in x:
-        results.append(analysisPDFSET.xfxQ(1,items,np.sqrt(Q2)) - analysisPDFSET.xfxQ(-1,items,np.sqrt(Q2)))
-    return results
-def _sv(x,analysisPDFSET,Q2):
-    results = []
-    for items in x:
-        results.append(analysisPDFSET.xfxQ(3,items,np.sqrt(Q2)) - analysisPDFSET.xfxQ(-3,items,np.sqrt(Q2)))
-    return results
+        results.append(analysisPDFSET.xfxQ(2,items,np.sqrt(Q2)) )
+        return results
+
 def _ubar(x,analysisPDFSET,Q2):
     results = []
     for items in x:
         results.append(analysisPDFSET.xfxQ(-2,items,np.sqrt(Q2)) )
     return results
+
+def _dv(x,analysisPDFSET,Q2):
+    results = []
+    for items in x:
+        results.append(analysisPDFSET.xfxQ(1,items,np.sqrt(Q2)) - analysisPDFSET.xfxQ(-1,items,np.sqrt(Q2)))
+    return results
+
+def _d(x,analysisPDFSET,Q2):
+    results = []
+    for items in x:
+        results.append(analysisPDFSET.xfxQ(1,items,np.sqrt(Q2)))
+    return results
+
 def _dbar(x,analysisPDFSET,Q2):
     results = []
     for items in x:
         results.append(analysisPDFSET.xfxQ(-1,items,np.sqrt(Q2)))
     return results
+
+def _sv(x,analysisPDFSET,Q2):
+    results = []
+    for items in x:
+        results.append(analysisPDFSET.xfxQ(3,items,np.sqrt(Q2)) - analysisPDFSET.xfxQ(-3,items,np.sqrt(Q2)))
+    return results
+
+def _s(x,analysisPDFSET,Q2):
+    results = []
+    for items in x:
+        results.append(analysisPDFSET.xfxQ(3,items,np.sqrt(Q2)) )
+    return results
+
 def _sbar(x,analysisPDFSET,Q2):
     results = []
     for items in x:
         results.append(analysisPDFSET.xfxQ(-3,items,np.sqrt(Q2)) )
     return results
+
 def _g(x,analysisPDFSET,Q2):
     results = []
     for items in x:
         results.append(analysisPDFSET.xfxQ(0,items,np.sqrt(Q2)) )
     return results
 
+def _cv(x,analysisPDFSET,Q2):
+    results = []
+    for items in x:
+        results.append(analysisPDFSET.xfxQ(4,items,np.sqrt(Q2)) - analysisPDFSET.xfxQ(-4,items,np.sqrt(Q2)))
+    return results
+
+def _c(x,analysisPDFSET,Q2):
+    results = []
+    for items in x:
+        results.append(analysisPDFSET.xfxQ(4,items,np.sqrt(Q2)) )
+    return results
+
+def _cbar(x,analysisPDFSET,Q2):
+    results = []
+    for items in x:
+        results.append(analysisPDFSET.xfxQ(-4,items,np.sqrt(Q2)) )
+    return results
+
+def _bv(x,analysisPDFSET,Q2):
+    results = []
+    for items in x:
+        results.append(analysisPDFSET.xfxQ(5,items,np.sqrt(Q2)) - analysisPDFSET.xfxQ(-5,items,np.sqrt(Q2)))
+    return results
+
+def _b(x,analysisPDFSET,Q2):
+    results = []
+    for items in x:
+        results.append(analysisPDFSET.xfxQ(5,items,np.sqrt(Q2)) )
+    return results
+
+def _bbar(x,analysisPDFSET,Q2):
+    results = []
+    for items in x:
+        results.append(analysisPDFSET.xfxQ(-5,items,np.sqrt(Q2)) )
+    return results
+
+def _tv(x,analysisPDFSET,Q2):
+    results = []
+    for items in x:
+        results.append(analysisPDFSET.xfxQ(6,items,np.sqrt(Q2)) - analysisPDFSET.xfxQ(-6,items,np.sqrt(Q2)))
+    return results
+
+def _t(x,analysisPDFSET,Q2):
+    results = []
+    for items in x:
+        results.append(analysisPDFSET.xfxQ(6,items,np.sqrt(Q2)) )
+    return results
+
+def _tbar(x,analysisPDFSET,Q2):
+    results = []
+    for items in x:
+        results.append(analysisPDFSET.xfxQ(-6,items,np.sqrt(Q2)) )
+    return results
  
+ 
+
+
 
 def _PDF(x,Q2, flavourList, analysisPDFSET):
     if isinstance(x, np.ndarray):
@@ -59,18 +139,42 @@ def _PDF(x,Q2, flavourList, analysisPDFSET):
     for flavour in flavourList:
         if flavour == "uv":
             results["uv"] = _uv(x,analysisPDFSET,Q2)
-        elif flavour == "dv":
-            results["dv"] = _dv(x,analysisPDFSET,Q2) 
-        elif flavour == "sv":
-            results["sv"] = _sv(x,analysisPDFSET,Q2)
+        elif flavour == "u":
+            results["u"] = _u(x,analysisPDFSET,Q2)
         elif flavour =="ubar":
             results["ubar"] =  _ubar(x,analysisPDFSET,Q2)
+        elif flavour == "dv":
+            results["dv"] = _dv(x,analysisPDFSET,Q2) 
+        elif flavour == "d":
+            results["d"] = _d(x,analysisPDFSET,Q2) 
         elif flavour =="dbar":
             results["dbar"]= _dbar(x,analysisPDFSET,Q2)
+        elif flavour == "sv":
+            results["sv"] = _sv(x,analysisPDFSET,Q2)
+        elif flavour =="s":
+            results["s"]=  _s(x,analysisPDFSET,Q2)
         elif flavour =="sbar":
             results["sbar"]=  _sbar(x,analysisPDFSET,Q2)
         elif flavour =="g":
             results["g"]=  _g(x,analysisPDFSET,Q2)
+        elif flavour == "cv":
+            results["cv"] = _cv(x,analysisPDFSET,Q2)
+        elif flavour == "c":
+            results["c"] = _c(x,analysisPDFSET,Q2)
+        elif flavour =="cbar":
+            results["cbar"] =  _cbar(x,analysisPDFSET,Q2)
+        elif flavour == "bv":
+            results["bv"] = _bv(x,analysisPDFSET,Q2)
+        elif flavour == "b":
+            results["b"] = _b(x,analysisPDFSET,Q2)
+        elif flavour =="bbar":
+            results["bbar"] =  _bbar(x,analysisPDFSET,Q2)
+        elif flavour == "tv":
+            results["tv"] = _tv(x,analysisPDFSET,Q2)
+        elif flavour == "t":
+            results["t"] = _t(x,analysisPDFSET,Q2)
+        elif flavour =="tbar":
+            results["tbar"] =  _tbar(x,analysisPDFSET,Q2)
 
     return results
         

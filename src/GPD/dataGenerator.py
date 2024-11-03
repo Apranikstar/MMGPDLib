@@ -11,7 +11,6 @@ def genSkewedData(initial, final, num_points, scatteringRate):
     
     # Apply the transformation to skew values towards initial
     skewed_values = np.power(uniform_random_values,scatteringRate)
-    
     # Transform values back to the range [initial, final], If you're confused the second part is calculated first.
     scaled_values = initial + (final - initial) * skewed_values
     # Remove zero values

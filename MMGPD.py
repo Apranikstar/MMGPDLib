@@ -6,15 +6,15 @@ from scipy.integrate import quad
 import src.GPD.computeGPD as computeGPD
 import src.GPD.computePDF as computePDF
 import src.GPD.computeProfileFunction as computeProfileFunction
-import src.GPD.analysisHandler as analysisHandler
+#import src.GPD.analysisHandler as analysisHandler
 import src.GPD.computeGA as computeGA
 import src.GPD.initializeAnalysis as initializeAnalysis
 import src.GPD.computeF1F2 as computeF1F2
 def listAnalysis():
-    analysisHandler.List()
+    initializeAnalysis.List()
 
 def xGPD(InitlizerArgs, analysisSet, analysisGPD, analysisFlavour, x, t):
-    Q2 = analysisHandler.getQ2(InitlizerArgs[0])
+    Q2 = initializeAnalysis.getQ2(InitlizerArgs[0])
     if analysisGPD == "H":
         profileFunction = computeProfileFunction._profileFuncH(InitlizerArgs[0],analysisSet,analysisFlavour, x)
         pdfFunction = computePDF._PDF(x,Q2, analysisFlavour, InitlizerArgs[1])
@@ -31,6 +31,7 @@ def xGPD(InitlizerArgs, analysisSet, analysisGPD, analysisFlavour, x, t):
         results = computeGPD.computeE(analysisPDF, profileFunction, t, analysisFlavour)
         return results
         
+####################
 def G_A(InitlizerArgs, analysisSet,t,percision ):
     def GAintegrand(x,t,InitlizerArgs, analysisSet):
         HtUV = computeGA.Ht_uv(x,t,InitlizerArgs, analysisSet)
@@ -41,10 +42,12 @@ def G_A(InitlizerArgs, analysisSet,t,percision ):
     
     return quad(GAintegrand, 1e-15, 1, args=(t, InitlizerArgs, analysisSet,),  epsabs=percision, epsrel=percision) [0]
     
+####################
 
 def G_D(t):
     Lambda2 = 0.71
     return (  1 - t / Lambda2 )**(-2) 
+####################
 
 def G_ME_P(InitlizerArgs,analysisSet, t):
     flavourChargeDict = {
@@ -61,6 +64,7 @@ def G_ME_P(InitlizerArgs,analysisSet, t):
     G_E_P = F1P + np.divide(t,4 * np.power(m_p,2)) * F2P
     #print("Results are : [G_M_Proton , G_E_Proton]")
     return G_M_P, G_E_P
+####################
 
 def G_ME_N(InitlizerArgs,analysisSet, t):
     flavourChargeDict = {
@@ -78,6 +82,7 @@ def G_ME_N(InitlizerArgs,analysisSet, t):
     #print("Results are : [G_M_Neutron , G_E_Neutron]")
     return G_M_N, G_E_N
 
+####################
 
 
 
