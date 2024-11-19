@@ -10,6 +10,7 @@ import src.GPD.computeProfileFunction as computeProfileFunction
 import src.GPD.computeGA as computeGA
 import src.GPD.initializeAnalysis as initializeAnalysis
 import src.GPD.computeF1F2 as computeF1F2
+from src.GPD.computeGPDxi import xGPDxiIntegrand 
 def listAnalysis():
     initializeAnalysis.List()
 
@@ -31,6 +32,17 @@ def xGPD(InitlizerArgs, analysisSet, analysisGPD, analysisFlavour, x, t):
         results = computeGPD.computeE(analysisPDF, profileFunction, t, analysisFlavour)
         return results
         
+def xGPDxi(InitilizerArgs, Set, GPDType , Flavour, x, t,xi):
+    if xi == 0:
+        return xGPD(InitilizerArgs, Set, GPDType , Flavour, x, t)
+        
+    b0 = np.divide(x+xi,1+xi)
+    if x <= xi:
+        a0 = 1e-5 
+    else:
+        a0 = np.divide(x-xi,1-xi)
+    return quad(xGPDxiIntegrand, a0, b0, args=(InitilizerArgs, Set, GPDType , Flavour,x,t,xi),epsabs=1e-9, limit = 150 )[0]
+    
 ####################
 def G_A(InitlizerArgs, analysisSet,t,percision ):
     def GAintegrand(x,t,InitlizerArgs, analysisSet):

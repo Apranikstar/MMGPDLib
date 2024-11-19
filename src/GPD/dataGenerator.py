@@ -5,9 +5,9 @@ def genSkewedData(initial, final, num_points, scatteringRate):
     # Ensure initial is less than final
     if initial >= final:
         raise ValueError("Initial value must be less than final value")
-    # Minor issue fixed by Mohammad Hossein Amiri
+
     # Generate values in the range [0, 1]
-    uniform_random_values = np.random.uniform(0, 1, num_points)
+    uniform_random_values = np.random.uniform(initial,final,num_points)
     
     # Apply the transformation to skew values towards initial
     skewed_values = np.power(uniform_random_values,scatteringRate)
