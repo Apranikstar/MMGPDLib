@@ -11,6 +11,13 @@ import src.GPD.computeGA as computeGA
 import src.GPD.initializeAnalysis as initializeAnalysis
 import src.GPD.computeF1F2 as computeF1F2
 from src.GPD.computeGPDxi import xGPDxiIntegrand 
+import src.GPD.computeUncertainPDF as updf
+import src.GPD.computeUncGPDSET11 as USET11
+from uncertainties import ufloat
+
+
+
+
 def listAnalysis():
     initializeAnalysis.List()
 
@@ -31,7 +38,52 @@ def xGPD(InitlizerArgs, analysisSet, analysisGPD, analysisFlavour, x, t):
         analysisPDF = computePDF.ComputePDFEFunction(InitlizerArgs[0],analysisSet, analysisFlavour, x)
         results = computeGPD.computeE(analysisPDF, profileFunction, t, analysisFlavour)
         return results
-        
+####################  
+def xGPDwUnc(InitlizerArgs, analysisSet, analysisGPD, analysisFlavour, x, t):
+    if analysisGPD == "H":
+        if analysisSet == "Set11":
+            norminal = xGPD(InitlizerArgs, analysisSet, analysisGPD, analysisFlavour, x, t)
+            profileFunctionH = computeProfileFunction._profileFuncH(InitlizerArgs[0],analysisSet,analysisFlavour, x)[analysisFlavour][0]
+            UPDFH = updf.uncertainxPDFH(InitlizerArgs, x, analysisFlavour)
+            if analysisFlavour == "uv":
+                M =  USET11.SigHuvSet11(t,x)
+            if analysisFlavour =="dv":
+                M = USET11.SigHdvSet11(t, x)
+            if analysisFlavour == "ubar":
+                M = USET11.SigHubarSet11(t,x)
+            if analysisFlavour == "dbar":
+                M = USET11.SigHdbarSet11(t,x)         
+            deltaH = np.sqrt(np.power(np.exp(t*profileFunctionH) * UPDFH[1],2)  +  np.power(UPDFH[0]*M , 2))
+            return ufloat(norminal,deltaH)
+
+    if analysisGPD == "Ht":
+        if analysisSet == "Set11":
+            norminal = xGPD(InitlizerArgs, analysisSet, analysisGPD, analysisFlavour, x, t)
+            profileFunctionHt = computeProfileFunction._profileFuncHt(InitlizerArgs[0],analysisSet,analysisFlavour, x)[analysisFlavour][0]
+            UPDFHt = updf.uncertainxPDFHt(InitlizerArgs, x, analysisFlavour)
+            if analysisFlavour == "uv":
+                M =  USET11.SigHTuvSet11(t,x)
+            if analysisFlavour =="dv":
+                M = USET11.SigHTdvSet11(t, x)
+            if analysisFlavour == "ubar":
+                M = USET11.SigHTubarSet11(t,x)
+            if analysisFlavour == "dbar":
+                M = USET11.SigHTdbarSet11(t,x)         
+            deltaHt = np.sqrt(np.power(np.exp(t*profileFunctionHt) * UPDFHt[1],2)  +  np.power(UPDFHt[0]*M , 2))
+            return ufloat(norminal,deltaHt)
+
+    if analysisGPD == "E":
+        if analysisSet == "Set11":
+            norminal = xGPD(InitlizerArgs, analysisSet, analysisGPD, analysisFlavour, x, t)
+            if analysisFlavour == "uv":
+                deltaE =  USET11.SigxEuvSet11(t,x)
+            if analysisFlavour =="dv":
+                deltaE = USET11.SigxEdvSet11(t, x)        
+            return ufloat(norminal,deltaE)
+
+
+
+####################
 def xGPDxi(InitilizerArgs, Set, GPDType , Flavour, x, t,xi):
     if xi == 0:
         return xGPD(InitilizerArgs, Set, GPDType , Flavour, x, t)
